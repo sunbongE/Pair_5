@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-
+from django.http import JsonResponse
 from reviews.models import Review
 from reviews.forms import ReviewForm, CommentForm
 # Create your views here.
@@ -53,3 +53,20 @@ def update(request,pk):
         'review':review
     }
     return render(request, 'reviews/create.html', context)
+
+def like(request, pk):
+    review = Review.objects.get(pk=pk)
+
+    if review.like_users.filter(pk=request.user.pk).exists():
+        review.like_users.remove(request.user)
+        is_liked = False
+    else:
+        review.like_users.add(request.user)
+        is_liked = True
+
+    data = {
+        'isLiked': is_liked,
+        'likeCount': review.like_users.count()
+    }
+
+    return JsonResponse(data)

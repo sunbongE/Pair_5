@@ -1,8 +1,61 @@
-<h1>
-  detail
-</h1>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load widget_tweaks %}
 
-<p>제목:{{ review.title }}</p>
-<p>내용:{{ review.content }}</p>
-<a href="{% url 'reviews:delete' review.pk %}">삭제</a>
-<a href="{% url 'reviews:update' review.pk %}">수정</a>
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center px-3 mb-2">
+    <h1>{{ review.title }}</h1>
+
+    <div class="d-flex">
+      {% if request.user == review.user %}
+        <a href="{% url 'reviews:update' review.pk %}" class="btn btn-primary me-2">수정</a>
+        <a href="{% url 'reviews:delete' review.pk %}" class="btn btn-danger">삭제</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <a href="{% url 'accounts:detail' review.user.pk %}" class="text-muted text-decoration-none px-3">{{ review.user }}</a>
+    <p class="text-muted px-3 m-0">마지막 수정 시간: {{ review.updated_at|date:'Y-m-d, H:m' }}</p>
+  </div>
+  <hr>
+  
+  <div style="min-height: 300px" class="px-3">
+    {% if review.image %}
+      <div class="text-center mb-4" style="height: 30rem">
+        <img src="{{ review.image.url }}" alt="{{ review.image }}" class="h-100">
+      </div>
+    {% endif %}
+    
+    <!-- 줄바꿈 & 글 자르기 -->
+    <p class="text-break" style="white-space: pre-wrap;">{{ review.content }}</p>
+  </div>
+  <hr>
+
+  <i id="btn-like" data-review-id="{{ review.pk }}" class="bi bi-heart-fill " style=" color: red;"></i>
+  <p id="likeCount">{{ review.like_users.count }}</p>
+{% endblock %}
+
+{% block script %}
+<script>
+  const btnLike = document.querySelector('#btn-like')
+  btnLike.addEventListener('click', event => {
+    axios({
+      method: 'get',
+      url: `/reviews/${event.target.dataset.reviewId}/like/`,
+    })
+    .then(response => {
+      if (response.data.isLiked === true) {
+        even.target.classList.remove('bi-heart')
+        event.target.classList.add('bi-heart-fill')
+      } else {
+        event.target.classList.remove('bi-heart-fill')
+        even.target.classList.add('bi-heart')
+      }
+
+      const likeCount = document.querySelector('#likeCount')
+      likeCount.innerText = response.data.likeCount
+    })
+  })
+</script>
+{% endblock script %}
