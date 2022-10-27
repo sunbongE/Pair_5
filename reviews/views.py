@@ -15,8 +15,9 @@ def create(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
             return redirect('reviews:index')
     else:
         form = ReviewForm()

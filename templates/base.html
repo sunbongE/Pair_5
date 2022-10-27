@@ -33,7 +33,7 @@
           <!-- 로그인 O -->
           {% if request.user.is_authenticated %}
             <li class="nav-item">
-              {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'detail' %}
+              {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'detail' and request.user == user %}
                 <a class="nav-link active" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.username }}'s Page</a>
               {% else %}
                 <a class="nav-link" href="{% url 'accounts:detail' request.user.pk %}">{{ request.user.username }}'s Page</a>
