@@ -29,8 +29,12 @@ def create(request):
 
 def detail(request,pk):
     review = Review.objects.get(pk=pk)
+    comment_form = CommentForm()
+    comments = review.comment_set.all()
     context = {
         'review':review,
+        'comment_form':comment_form,
+        'comments':comments,
     }
     return render(request, 'reviews/detail.html', context)
 
@@ -45,7 +49,7 @@ def update(request,pk):
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            return redirect('reviews:index', review.pk)
+            return redirect('reviews:detail', review.pk)
     else:
         form = ReviewForm(instance=review)
     context = {
@@ -70,3 +74,20 @@ def like(request, pk):
     }
 
     return JsonResponse(data)
+
+def comment_create(request,review_pk):
+    review = Review.objects.get(pk=review_pk)
+
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.user = request.user
+        comment.review = review
+        comment.save()  
+    data = {
+        'username':comment.user.username,
+        'content':comment.content,
+    }
+    return JsonResponse(data)
+
+    
