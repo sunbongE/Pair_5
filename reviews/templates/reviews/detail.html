@@ -1,0 +1,8 @@
+<h1>
+  detail
+</h1>
+
+<p>제목:{{ review.title }}</p>
+<p>내용:{{ review.content }}</p>
+<a href="{% url 'reviews:delete' review.pk %}">삭제</a>
+<a href="{% url 'reviews:update' review.pk %}">수정</a>
