@@ -1,2 +1,10 @@
-<h1>
-  gh</h1>
+<h1>gh</h1>
+
+{% for review in reviews %}
+  <p>
+    <a href="{% url 'reviews:detail' review.pk %}">{{ review.title }}</a>
+  </p>
+
+{% endfor %}
+<a href="{% url 'reviews:create' %}">
+  글 작성</a>
