@@ -32,9 +32,12 @@
     <p class="text-break" style="white-space: pre-wrap;">{{ review.content }}</p>
   </div>
   <hr>
-
+  {% if request.user in review.like_users.all %}
+  <i id="btn-like" data-review-id="{{ review.pk }}" class="bi bi-heart-fill " style=" color: red;"></i>
+  {%else%}
   <i id="btn-like" data-review-id="{{ review.pk }}" class="bi bi-heart " style=" color: red;"></i>
-  <p id="likeCount">{{ review.like_users.count }}</p>
+  {% endif %}
+  <span id="likeCount">{{ review.like_users.count }}</span>
   <div class="px-3 my-4">
     <form id="comment-form" data-review-id="{{ review.pk }}">
       <div class="row align-items-center">
