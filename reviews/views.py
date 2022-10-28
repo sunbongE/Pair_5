@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
-from reviews.models import Review
+from reviews.models import Review,Comment
 from reviews.forms import ReviewForm, CommentForm
 # Create your views here.
 
@@ -90,4 +90,16 @@ def comment_create(request,review_pk):
     }
     return JsonResponse(data)
 
-    
+def comment_delete(request,review_pk,comment_pk):
+    review = Review.objects.get(pk=review_pk)
+    comment = Comment.objects.get(pk=comment_pk)
+    is_deleted = False
+    if request.user == comment.user:
+        is_deleted = True
+        comment.delete()
+
+    data = {
+        'is_deleted':is_deleted
+    }
+
+    return JsonResponse(data)
