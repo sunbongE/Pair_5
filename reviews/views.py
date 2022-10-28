@@ -85,8 +85,10 @@ def comment_create(request, review_pk):
         comment.review = review
         comment.save()
     data = {
-        "username": comment.user.username,
-        "content": comment.content,
+
+        'username':comment.user.username,
+        'content':comment.content,
+        'commentCount': review.comment_set.count(),
     }
     return JsonResponse(data)
 
@@ -99,6 +101,10 @@ def comment_delete(request, review_pk, comment_pk):
         is_deleted = True
         comment.delete()
 
-    data = {"is_deleted": is_deleted}
+
+    data = {
+        'is_deleted':is_deleted,
+        'commentCount': review.comment_set.count(),
+    }
 
     return JsonResponse(data)
