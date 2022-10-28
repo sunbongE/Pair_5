@@ -1,13 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>gh</h1>
+  <h1 class="text-center">게시글</h1>
 
-  {% for review in reviews %}
-    <p>
-      <a href="{% url 'reviews:detail' review.pk %}">{{ review.title }}</a>
-    </p>
+  <div class="">
+    <a class="btn btn-primary float-end" href="{% url 'reviews:create' %}">
+      글 작성</a>
+  </div>
 
-  {% endfor %}
-  <a href="{% url 'reviews:create' %}">
-    글 작성</a>
+  <div class="container d-flex justify-content-center">
+    <div class="row">
+      {% for review in reviews %}
+
+      <div class="col-3 d-flex justify-content-center">
+          <div class="card m-3" style="width: 18rem;">
+            {% if review.thumbnail %}
+            <img src="{{ review.thumbnail.url }}" class="card-img-top " alt="dummy-img" height="300px">
+            {% else %}
+            <img src="https://dummyimage.com/600x400/000/fff" class="card-img-top " alt="dummy-img" height="300px">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title text-center"><a href="{% url 'reviews:detail' review.pk %}">{{ review.title }}</a></h5>
+              {% comment %} <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> {% endcomment %}
+              <a href="{% url 'reviews:detail' review.pk %}" class="float-end btn btn-primary">자세히 보기</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
 {% endblock content %}
