@@ -34,7 +34,9 @@
 
   {% if request.user in review.like_users.all %}
     <i id="btn-like" data-review-id="{{ review.pk }}" class="bi bi-heart-fill " style=" color: red;"></i>
+
   {%else%}
+
     <i id="btn-like" data-review-id="{{ review.pk }}" class="bi bi-heart " style=" color: red;"></i>
   {% endif %}
   <span id="likeCount">{{ review.like_users.count }}</span>
@@ -109,6 +111,7 @@
     const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value
     commentform.addEventListener('submit', event => {
         event.preventDefault()
+
         const reviewId = event.target.dataset.reviewId
 
         axios({
@@ -125,10 +128,10 @@
           comments.insertAdjacentHTML('beforeend',
             `<div class="px-3">
               <a class="text-muted m-0 text-decoration-none">
-                ${ response.data.username }
+                ${response.data.username}
               </a>
+                <p class="m-0">${response.data.content}</p>
                 
-              <p class="m-0">${ response.data.content }</p>
               <hr>
             </div>`)
 
