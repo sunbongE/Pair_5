@@ -15,21 +15,16 @@
   <body>
     {% if request.resolver_match.url_name == 'create'  %}
     <h1>Create</h1>
-    <form action="{% url 'reviews:create' %}" method='POST' enctype="multipart/form-data">
-
-      {% csrf_token %}
-      {% bootstrap_form form %}
-      <input class='btn btn-success' type="submit" value='Submit'>
-    </form>
-    {% elif request.resolver_match.app_name == 'reviews' and request.resolver_match.url_name == 'update'%}
-    <h1>update</h1>
-    <form action="{% url 'reviews:update' review.pk %}" method='POST' enctype="multipart/form-data">
-
-      {% csrf_token %}
-      {% bootstrap_form form %}
-      <input class='btn btn-success' type="submit" value='Submit'>
-    </form>
+    {%else%}
+    <h1>Update</h1>
     {% endif %}
+    <form action="" method='POST' enctype="multipart/form-data">
+
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <input class='btn btn-success' type="submit" value='Submit'>
+    </form>
+    
 
 
   </body>
