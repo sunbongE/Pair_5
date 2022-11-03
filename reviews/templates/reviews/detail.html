@@ -61,8 +61,8 @@
     </form>
   </div>
 
-  <div id='comments'>
-    <div class="px-3">
+  <div >
+    <div id='comments' class="px-3">
       {% for comment in comments %}
         <div id="comment-{{ comment.pk }}">
           <a href="{% url 'accounts:detail' comment.user.pk %}" class="text-muted m-0 text-decoration-none">
@@ -113,7 +113,6 @@
         event.preventDefault()
 
         const reviewId = event.target.dataset.reviewId
-
         axios({
           method: 'POST',
           url: `/reviews/${reviewId}/comment/`,
@@ -123,18 +122,27 @@
         .then(response => {
           const comments = document.querySelector('#comments')
           const commentCount = document.querySelector('#comment-count')
-
+          
           commentCount.innerText = response.data.commentCount
           comments.insertAdjacentHTML('beforeend',
-            `<div class="px-3">
-              <a class="text-muted m-0 text-decoration-none">
+            `
+            <div id="comment-22">
+              <a href="/accounts/1/" class="text-muted m-0 text-decoration-none">
                 ${response.data.username}
               </a>
-                <p class="m-0">${response.data.content}</p>
+    
+              <div class="d-flex align-items-center">
+                <p class="m-0 me-auto">${response.data.content}</p>
                 
+                  <form data-review-id="1" data-comment-id="22" id="comment-delete" class="comment-delete-forms m-0">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="mgXFaQX5Vd42OM322AtAuqeJ4alI73AalS8Tvq3eD8rtlia10HqqxxNhbUnIY3fd">
+                    <input type="submit" value="삭제" class="btn btn-danger">
+                  </form>
+                
+              </div>
               <hr>
-            </div>`)
-
+            </div>
+`)
             commentform.reset()
           })
       })
